@@ -361,24 +361,30 @@ A generic function to handle the basics of weapon thinking
 
 int gunframe_next = 0;
 
-void NextWeaponFrame(edict_t *ent, int *skip_frames) 
+void NextWeaponFrame(edict_t *ent, int *skip_frames)
 {
 	int debug = false;
 	int n;
 
 	gunframe_next = ent->client->ps.gunframe + 1;
 
-	if (skip_frames) {
+	if (skip_frames)
+	{
 		// skip weapon animation
-		for (n = 0; skip_frames[n]; n++) {
-			if (gunframe_next == skip_frames[n]) {
-					return;
+		for (n = 0; skip_frames[n]; n++)
+		{
+			if (gunframe_next == skip_frames[n])
+			{
+				return;
 			}
 		}
 	}
 
 	ent->client->ps.gunframe++;
-	if (debug) { gi.cprintf(ent, PRINT_HIGH, " - next frame:   %d\n", ent->client->ps.gunframe); }
+	if (debug)
+	{
+		gi.cprintf(ent, PRINT_HIGH, " - next frame:   %d\n", ent->client->ps.gunframe);
+	}
 	return;
 }
 
@@ -389,7 +395,10 @@ void Weapon_Generic(edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST, 
 
 	if (ent->deadflag || ent->s.modelindex != 255) // VWep animations screw up corpses
 	{
-		if (debug) { gi.cprintf(ent, PRINT_HIGH, "Gunframe (dead): %d\n", ent->client->ps.gunframe); }
+		if (debug)
+		{
+			gi.cprintf(ent, PRINT_HIGH, "Gunframe (dead): %d\n", ent->client->ps.gunframe);
+		}
 		return;
 	}
 
@@ -416,7 +425,10 @@ void Weapon_Generic(edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST, 
 		}
 
 		NextWeaponFrame(ent, skip_frames);
-		if (debug) { gi.cprintf(ent, PRINT_HIGH, "Gunframe (dropping): %d\n", ent->client->ps.gunframe); }
+		if (debug)
+		{
+			gi.cprintf(ent, PRINT_HIGH, "Gunframe (dropping): %d\n", ent->client->ps.gunframe);
+		}
 		return;
 	}
 
@@ -432,7 +444,10 @@ void Weapon_Generic(edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST, 
 
 		NextWeaponFrame(ent, skip_frames);
 
-		if (debug) { gi.cprintf(ent, PRINT_HIGH, "Gunframe (activating): %d\n", ent->client->ps.gunframe); }
+		if (debug)
+		{
+			gi.cprintf(ent, PRINT_HIGH, "Gunframe (activating): %d\n", ent->client->ps.gunframe);
+		}
 		return;
 	}
 
@@ -458,7 +473,10 @@ void Weapon_Generic(edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST, 
 			}
 		}
 
-		if (debug) { gi.cprintf(ent, PRINT_HIGH, "Gunframe (new weapon): %d\n", ent->client->ps.gunframe); }
+		if (debug)
+		{
+			gi.cprintf(ent, PRINT_HIGH, "Gunframe (new weapon): %d\n", ent->client->ps.gunframe);
+		}
 		return;
 	}
 
@@ -504,7 +522,10 @@ void Weapon_Generic(edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST, 
 				gunframe_next = FRAME_IDLE_FIRST;
 				ent->client->ps.gunframe = FRAME_IDLE_FIRST;
 
-				if (debug) { gi.cprintf(ent, PRINT_HIGH, "Gunframe (idle): %d\n", ent->client->ps.gunframe); }
+				if (debug)
+				{
+					gi.cprintf(ent, PRINT_HIGH, "Gunframe (idle): %d\n", ent->client->ps.gunframe);
+				}
 				return;
 			}
 
@@ -522,7 +543,10 @@ void Weapon_Generic(edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST, 
 
 			NextWeaponFrame(ent, skip_frames);
 
-			if (debug) { gi.cprintf(ent, PRINT_HIGH, "Gunframe (idle): %d\n", ent->client->ps.gunframe); }
+			if (debug)
+			{
+				gi.cprintf(ent, PRINT_HIGH, "Gunframe (idle): %d\n", ent->client->ps.gunframe);
+			}
 			return;
 		}
 	}
@@ -537,12 +561,16 @@ void Weapon_Generic(edict_t *ent, int FRAME_ACTIVATE_LAST, int FRAME_FIRE_LAST, 
 					gi.sound(ent, CHAN_ITEM, gi.soundindex("items/damage3.wav"), 1, ATTN_NORM, 0);
 
 				fire(ent);
-				if (debug) { gi.cprintf(ent, PRINT_HIGH, "Gunframe (firing): %d\n", ent->client->ps.gunframe); }
+				if (debug)
+				{
+					gi.cprintf(ent, PRINT_HIGH, "Gunframe (firing): %d\n", ent->client->ps.gunframe);
+				}
 				break;
 			}
 		}
 
-		if (!fire_frames[n]) {
+		if (!fire_frames[n])
+		{
 			NextWeaponFrame(ent, skip_frames);
 		}
 
@@ -560,20 +588,21 @@ GRENADE
 */
 
 #define GRENADE_TIMER 3.0
-#define GRENADE_MINSPEED 400
-#define GRENADE_MAXSPEED 800
+#define GRENADE_MINSPEED 500
+#define GRENADE_MAXSPEED 1500
 
 void weapon_grenade_fire(edict_t *ent, qboolean held)
 {
 	vec3_t offset;
 	vec3_t forward, right;
 	vec3_t start;
-	int damage = 125;
+	int damage = 140;
 	float timer;
 	int speed;
 	float radius;
 
-	radius = damage + 40;
+	radius = 170;
+
 	if (is_quad)
 		damage *= 4;
 
@@ -842,9 +871,9 @@ void Blaster_Fire(edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, int
 
 	if (is_quad)
 		damage *= 4;
-	
+
 	AngleVectors(ent->client->v_angle, forward, right, NULL);
-	
+
 	VectorSet(offset, 24, 8, ent->viewheight - 2);
 	VectorAdd(offset, g_offset, offset);
 	P_ProjectSource(ent->client, ent->s.origin, offset, forward, right, start);
@@ -853,7 +882,7 @@ void Blaster_Fire(edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, int
 	ent->client->kick_angles[0] = -1;
 
 	VectorCopy(ent->s.origin, start);
-	start[2] += ent->viewheight; // dead-center of screen
+	start[2] += ent->viewheight;		 // dead-center of screen
 	VectorMA(start, 48, forward, start); // move 48 units forward
 
 	vec3_t aim;
@@ -872,11 +901,12 @@ void Blaster_Fire(edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, int
 		gi.WriteByte(MZ_BLASTER | is_silenced);
 	gi.multicast(ent->s.origin, MULTICAST_PVS);
 
-	if (debug) {
+	if (debug)
+	{
 		vec3_t end;
 		VectorMA(start, 8192, forward, end);
 		gi.WriteByte(svc_temp_entity);
-		gi.WriteByte(TE_DEBUGTRAIL);  // or TE_BFG_LASER
+		gi.WriteByte(TE_DEBUGTRAIL); // or TE_BFG_LASER
 		gi.WritePosition(start);
 		gi.WritePosition(end);
 		gi.multicast(start, MULTICAST_PHS);
@@ -933,7 +963,6 @@ void Blaster_Fire(edict_t *ent, vec3_t g_offset, int damage, qboolean hyper, int
 }
 */
 
-
 void Weapon_Blaster_Fire(edict_t *ent)
 {
 	int damage;
@@ -942,7 +971,7 @@ void Weapon_Blaster_Fire(edict_t *ent)
 		damage = 40;
 	else
 		damage = 40;
-	
+
 	Blaster_Fire(ent, vec3_origin, damage, false, EF_BLASTER);
 
 	ent->client->ps.gunframe++;
